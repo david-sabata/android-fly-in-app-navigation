@@ -2,10 +2,10 @@ package com.deaux.fan;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -76,11 +76,21 @@ public class FanView extends RelativeLayout {
 		mgr.beginTransaction().add(R.id.appView, main).commit();
 		mgr.beginTransaction().add(R.id.fanView, fan).commit();
 	}
-	
-	public void replaceMainFragment(Fragment replacement){
+
+	public void replaceMainFragment(Fragment replacement) {
+		replaceMainFragment(replacement, true);
+	}
+
+	public void replaceMainFragment(Fragment replacement, boolean writeHistory) {
 		FragmentManager mgr = ((FragmentActivity) getContext())
 				.getSupportFragmentManager();
-		mgr.beginTransaction().replace(R.id.appView, replacement).commit();
+		FragmentTransaction trans = mgr.beginTransaction();
+		trans.replace(R.id.appView, replacement);
+
+		if (writeHistory)
+			trans.addToBackStack(null);
+
+		trans.commit();
 	}
 
 	public boolean isOpen() {
