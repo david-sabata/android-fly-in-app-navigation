@@ -93,6 +93,21 @@ public class FanView extends RelativeLayout {
 		trans.commit();
 	}
 
+	public void replaceFanFragment(Fragment replacement) {
+		replaceFanFragment(replacement, true);
+	}
+	
+	public void replaceFanFragment(Fragment replacement, boolean writeHistory) {
+		FragmentManager mgr = ((FragmentActivity) getContext()).getSupportFragmentManager();
+		FragmentTransaction trans = mgr.beginTransaction();
+		trans.replace(R.id.fanView, replacement);
+		
+		if(writeHistory) {
+			trans.addToBackStack(null);
+		}
+		
+		trans.commit();
+	}
 	public boolean isOpen() {
 		return mFanView.getVisibility() == VISIBLE && !isClosing;
 	}
