@@ -17,6 +17,7 @@ import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+
 public class FanView extends RelativeLayout {
 
 	private LinearLayout mMainView;
@@ -28,7 +29,8 @@ public class FanView extends RelativeLayout {
 	private Animation alphaAnimation;
 	private int animDur;
 	private boolean fade;
-
+	private SidebarListener listener;
+	
 	private boolean isClosing;
 
 	public FanView(Context context) {
@@ -138,6 +140,7 @@ public class FanView extends RelativeLayout {
 							.getDisplayMetrics()), 0, animDur);
 			openAnimation.setFillAfter(true);
 
+			
 			if (fade) {
 				alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
 				alphaAnimation.setDuration((int) 0.75 * animDur);
@@ -149,6 +152,7 @@ public class FanView extends RelativeLayout {
 
 			mMainView.startAnimation(openAnimation);
 			isClosing = false;
+			listener.onSidebarOpen();
 		} else if (!isClosing && isOpen()) {
 			closeAnimation = new FanAnimation(px, 0, 0,
 					TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20,
@@ -179,7 +183,12 @@ public class FanView extends RelativeLayout {
 			}
 			mMainView.startAnimation(closeAnimation);
 			isClosing = true;
+			listener.onSidebarClose();
 		}
+	}
+	
+	public void setSidebarListener(SidebarListener l) {
+		listener = l;
 	}
 
 	private class FanAnimation extends Animation {
@@ -218,5 +227,5 @@ public class FanView extends RelativeLayout {
 			}
 		}
 	}
-
+	
 }
