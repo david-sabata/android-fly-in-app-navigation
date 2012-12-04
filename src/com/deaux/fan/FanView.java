@@ -1,11 +1,11 @@
 package com.deaux.fan;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -30,7 +30,7 @@ public class FanView extends RelativeLayout {
 	private int animDur;
 	private boolean fade;
 	private SidebarListener listener;
-	
+
 	private boolean isClosing;
 
 	public FanView(Context context) {
@@ -73,8 +73,7 @@ public class FanView extends RelativeLayout {
 		mFanView = (LinearLayout) findViewById(R.id.fanView);
 		mTintView = findViewById(R.id.tintView);
 
-		FragmentManager mgr = ((FragmentActivity) getContext())
-				.getSupportFragmentManager();
+		FragmentManager mgr = ((Activity) getContext()).getFragmentManager();
 		mgr.beginTransaction().add(R.id.appView, main).commit();
 		mgr.beginTransaction().add(R.id.fanView, fan).commit();
 	}
@@ -84,8 +83,7 @@ public class FanView extends RelativeLayout {
 	}
 
 	public void replaceMainFragment(Fragment replacement, boolean writeHistory) {
-		FragmentManager mgr = ((FragmentActivity) getContext())
-				.getSupportFragmentManager();
+		FragmentManager mgr = ((Activity) getContext()).getFragmentManager();
 		FragmentTransaction trans = mgr.beginTransaction();
 		trans.replace(R.id.appView, replacement);
 
@@ -98,18 +96,19 @@ public class FanView extends RelativeLayout {
 	public void replaceFanFragment(Fragment replacement) {
 		replaceFanFragment(replacement, true);
 	}
-	
+
 	public void replaceFanFragment(Fragment replacement, boolean writeHistory) {
-		FragmentManager mgr = ((FragmentActivity) getContext()).getSupportFragmentManager();
+		FragmentManager mgr = ((Activity) getContext()).getFragmentManager();
 		FragmentTransaction trans = mgr.beginTransaction();
 		trans.replace(R.id.fanView, replacement);
-		
-		if(writeHistory) {
+
+		if (writeHistory) {
 			trans.addToBackStack(null);
 		}
-		
+
 		trans.commit();
 	}
+
 	public boolean isOpen() {
 		return mFanView.getVisibility() == VISIBLE && !isClosing;
 	}
@@ -140,7 +139,7 @@ public class FanView extends RelativeLayout {
 							.getDisplayMetrics()), 0, animDur);
 			openAnimation.setFillAfter(true);
 
-			
+
 			if (fade) {
 				alphaAnimation = new AlphaAnimation(0.8f, 0.0f);
 				alphaAnimation.setDuration((int) 0.75 * animDur);
@@ -186,7 +185,7 @@ public class FanView extends RelativeLayout {
 			listener.onSidebarClose();
 		}
 	}
-	
+
 	public void setSidebarListener(SidebarListener l) {
 		listener = l;
 	}
@@ -227,5 +226,5 @@ public class FanView extends RelativeLayout {
 			}
 		}
 	}
-	
+
 }
